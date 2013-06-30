@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>moo Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>calling staging not moo</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">asdfDevice is Ready</p>
+                <p id="deviceProperties">Loading device properties...</p>
+                <p id="apiUrl"></p>
+                <p id="serverResponse">Response From Server</p>
+                <a href="#" onclick="registerDevice();">Register Device</a>
+            </div>
+        </div>
+        <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            //app.initialize();
+            //debugger    
+            function registerDevice() {
+                alert('registering device');
+                var tm = new Date().getTime()
+                var api_url = "http://staging.answeringservicecare.com/api/mobile/v1/devices?api_key=1234&callback=deviceRegistered&device[uuid]=1234&device[name]=wee&device[phonegap]=pg&device[platform]=platf&device[version]=1"
+                //var api_url = "http://staging.answeringservicecare.com/device_register?contentType=site&ts=2012081709240999&&outputMode=json&jsonpCallback=deviceRegistered";
+                //var api_url = "http://feedsyn.univision.com/contentXml?cid=8&contentType=site&ts=20120817092407&partner=test&feedId=3097&outputMode=json&jsonpCallback=deviceRegistered";    
+                alert(api_url);
+                $.ajax({
+                    type: "GET",
+                    url: api_url,
+                    dataType: "jsonp",
+                    cache: false,
+                    jsonpCallback: "deviceRegistered"
+                });
+                return false;
+            }
+
+            function deviceRegistered(data){
+                if(!data){
+                    alert('no data');
+                } else {
+                    alert('device registered');
+                    alert(JSON.stringify(data));
+                    var resp_box = document.getElementById('serverResponse');
+                    resp_box.innerHTML = JSON.stringify(data);
+                }
+            };
+        </script>
+    </body>
+</html>
